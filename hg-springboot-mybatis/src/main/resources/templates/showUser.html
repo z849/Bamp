@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border="1px" th:if="${not#lists.isEmpty(userInfoList)}">
+        <tr>
+            <td>用户编号</td>
+            <td>用户名</td>
+            <td>用户密码</td>
+        </tr>
+        <tr th:each="user:${userInfoList}">
+            <td th:text="${user.userid}"></td>
+            <td th:text="${user.username}"> </td>
+            <td th:text="${user.password}"></td>
+        </tr>
+    </table>
+
+
+</body>
+
+</html>

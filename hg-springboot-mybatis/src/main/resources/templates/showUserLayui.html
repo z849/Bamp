@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    </meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    </meta>
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    </link>
+</head>
+<body class="layui-layout-body">
+
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">layui 后台布局</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img" />
+                    小铭
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">所有用户</a>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+
+
+           <div style="padding: 0px;color: #c9c9c9" >
+            <table id="demo0" lay-filter="test"></table>
+
+
+            <table id="demo" lay-filter="test"></table>
+            <table id="demo1" lay-filter="test"></table>
+               <div class="layui-btn-container">
+               <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+               <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+               <button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
+          </div>
+    </div>
+
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="/layui/layui.js"></script>
+
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+
+</script>
+
+</body>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 450
+            ,url: 'showUserLayui' //数据接口
+            ,page: true //开启分页,
+            ,limit:6
+            ,limits:[5,10,15,20,25,30]
+            ,cols: [
+                [ //表头
+                    {field:'1',fixed: 'left',checkbox: true}
+                    ,{field: 'userid', title: '用户编号', width:120, sort: true}
+                    ,{field: 'username', title: '用户名', width:120}
+                    ,{field: 'password', title: '密码', width:200, sort: true}
+                ]]
+        });
+
+    });
+</script>
+
+<script>
+    //JS 调用：
+    table.render({
+        elem: '#demo0'
+        ,toolbar: '#toolbarDemo'
+        //,…… //其他参数
+    });
+    table.on('toolbar(test)', function(obj){
+        var checkStatus = table.checkStatus(obj.config.id);
+        switch(obj.event){
+            case 'add':
+                layer.msg('添加');
+                break;
+            case 'delete':
+                layer.msg('删除');
+                break;
+            case 'update':
+                layer.msg('编辑');
+                break;
+        };
+    });
+</script>
+
+</html>
