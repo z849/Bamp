@@ -46,7 +46,12 @@ public class UserBizImpl implements UserBiz{
             return userMapper.selectUserByUsername(username);
         }
 
-        @Override
+    @Override
+    public User selectUserByLoginame(String loginame) {
+        return userMapper.selectUserByLoginname(loginame);
+    }
+
+    @Override
         public int insertSelective(User record) {
             //次处要进行密码加盐加密
             String salt = UUID.randomUUID().toString();
@@ -66,4 +71,19 @@ public class UserBizImpl implements UserBiz{
         public int updateByPrimaryKeySelective(User record) {
             return userMapper.updateByPrimaryKeySelective(record);
         }
+
+    @Override
+    public int resetPassword(User record) {
+        String salt = UUID.randomUUID().toString();
+        String message = record.getPassword();
+        String encryption = ShiroUtil.encryptionBySalt(salt, message);
+        record.setPassword(encryption);
+        record.setSalt(salt);
+        return userMapper.resetPassword(record);
+    }
+
+    @Override
+    public List<User> searchUserById(int userId) {
+        return userMapper.searchUserById(userId);
+    }
 }

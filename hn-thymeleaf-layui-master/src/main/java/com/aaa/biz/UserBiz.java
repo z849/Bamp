@@ -16,7 +16,11 @@ public interface UserBiz {
 
     PageInfo<User> selectAllUser(int page, int limit);
     User selectUserByUsername(String username);
+    User selectUserByLoginame(String loginame);
     int insertSelective(User record);
     int delUserByID(List<String> ids);
     int updateByPrimaryKeySelective(User record);
+    int resetPassword(User record);
+
+    List<User> searchUserById(int userId);
 }

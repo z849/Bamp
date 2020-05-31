@@ -1,6 +1,7 @@
 package com.aaa.controller;
 
 import com.aaa.biz.UserBiz;
+import com.aaa.dao.UserMapper;
 import com.aaa.entity.LayUiTable;
 import com.aaa.entity.MyUserInfo;
 import com.aaa.entity.User;
@@ -9,9 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -47,6 +46,62 @@ public class UserController {
         return layUiTable;
     }
 
+
+
+    /**
+     *
+     * @param userInfo
+     * @return
+     */
+    //管理员注册时验证用户名是否可用
+    @RequestMapping("/findByName")
+    @ResponseBody
+    public boolean toVerifyUsername( User userInfo) {
+        String username=userInfo.getLoginName();
+        System.out.println(username);
+        //根据用户名查询管理员(包括status为0的   以防恢复引起bug)
+        User admin1=userBizImpl.selectUserByUsername(username);
+        if(admin1==null)
+        {
+            System.out.println(111);
+            //返回true则为没有该用户名可以被注册
+            return true;
+        }else {
+            System.out.println(222);
+            return false;
+        }
+    }
+    @RequestMapping("/searchUserById")
+    @ResponseBody
+    public LayUiTable searchUserById(int userId){
+
+        System.out.println(userId);
+        List<User> list = userBizImpl.searchUserById(userId);
+        System.out.println(list);
+        LayUiTable layUiTable =new LayUiTable();
+        layUiTable.setCode(0);
+        layUiTable.setMsg("返回消息");
+        //设置分页之后的返回值
+        layUiTable.setCount(1);
+        layUiTable.setData(list);
+        return layUiTable;
+    }
+
+    @RequestMapping("/resetPassword")
+    @ResponseBody
+    public Object resetPassword(User userInfo){
+        System.out.println(userInfo);
+        int i = userBizImpl.resetPassword(userInfo);
+        Map map= new HashMap<>();
+        if(i>0){
+            map.put("code",MyConstants.successCode);
+            map.put("message",MyConstants.resetSuccessMsg);
+        }else {
+            map.put("code",MyConstants.failCode);
+            map.put("message",MyConstants.resetFailMsg);
+        }
+        return map;
+    }
     @RequestMapping("/saveUser")
     @ResponseBody
     public Object saveUser(User userInfo){

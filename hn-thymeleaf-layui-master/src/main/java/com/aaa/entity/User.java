@@ -2,6 +2,8 @@ package com.aaa.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import tk.mybatis.mapper.annotation.LogicDelete;
+
 
 import java.util.Date;
 
@@ -29,6 +31,7 @@ public class User {
 
     private String status;
 
+    @LogicDelete
     private String delFlag;
 
     private String createBy;

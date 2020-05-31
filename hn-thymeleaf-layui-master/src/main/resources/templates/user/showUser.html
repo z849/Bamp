@@ -8,21 +8,35 @@
     <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
 </head>
 <body>
+<div class="demoTable">
+    搜索ID：
+    <div class="layui-inline">
+        <input class="layui-input" name="userId" id="demoReload" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload" id="search">搜索</button>
+</div>
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="mytoolbar">
     <button type="button" class="layui-btn layui-btn-sm" lay-event="saveUser"><i class="layui-icon layui-icon-addition"></i>添加</button>
     <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delUser"><i class="layui-icon layui-icon-delete"></i>删除</button>
 </script>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+
     <a class="layui-btn  layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="resetPassword">重置密码</a>
 </script>
 <form class="layui-form" action="" id="userSaveForm" style="display: none">
     <div class="layui-form-item">
+        <label class="layui-form-label">登录名</label>
+        <div class="layui-input-block">
+            <input type="text" name="loginName" required lay-verify="required|loginName" placeholder="请输入登录名" autocomplete="off"
+                   class="layui-input" onblur="myfunction()">
+        </div>
+
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
-            <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <input type="text" name="userName" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+                   class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -32,6 +46,30 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">邮箱</label>
+        <div class="layui-input-block">
+            <input type="text" name="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号码</label>
+        <div class="layui-input-block">
+            <input type="text" name="phonenumber" required  lay-verify="required" placeholder="请输入手机号码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-block">
+            <select name="interest" lay-filter="aihao">
+                <option value="0">管理员</option>
+                <option value="1">普通角色</option>
+                <option value="2">测试角色</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
         <div class="layui-input-block">
             <button type="button"  	class="layui-btn layui-btn-normal" lay-submit lay-filter="saveUserForm">保存</button>
             <button type="reset"  	class="layui-btn layui-btn-warm">重置</button>
@@ -40,11 +78,17 @@
 
 </form>
 <form class="layui-form" action="" id="userEditForm" style="display: none">
-    <input type="hidden" id="userid" name="userid" >
+    <input type="hidden" id="userId" name="userId" >
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录名</label>
+        <div class="layui-input-block">
+            <input type="text" id="loginName" name="loginName" required  lay-verify="required" placeholder="请输入登录名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
-            <input type="text" id="username" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <input type="text" id="userName" name="userName" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -54,9 +98,34 @@
         </div>
     </div>
 
+
+</form>
+<form class="layui-form" action="" id="resetPasswordForm" style="display: none">
+    <input type="hidden" id="reuserId" name="userId" >
+    <div class="layui-form-item">
+        <label class="layui-form-label">新密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button"  	class="layui-btn layui-btn-normal" lay-submit lay-filter="resetPasswordForm">修改</button>
+            <button type="reset"  	class="layui-btn layui-btn-warm">重置</button>
+        </div>
+    </div>
 </form>
 </body>
 <script>
+    /*
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+        });
+    });*/
     var form=layui.form;
     var table=layui.table;
     form.render();//渲染表单
@@ -71,17 +140,51 @@
             ,toolbar: '#mytoolbar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,cols: [
                 [ //表头
-                {field: 'userId', title: '用户编号', width:80, sort: true, fixed: 'left',checkbox: true}
+                {field: 'userId',title: '用户编号', width:70, sort: true, fixed: 'left',checkbox: true}
                 ,{field: 'loginName', title: '登录名', width:120, sort: true, fixed: 'left'}
-                ,{field: 'userName', title: '真实姓名', width:120}
+                ,{field: 'userName', title: '用户姓名', width:120}
                 ,{field: 'email', title: '邮箱', width:180}
                 ,{field: 'phonenumber', title: '手机号', width:120}
-                ,{field: 'status', title: '状态', width:50}
+                ,{field: 'status', title: '状态', width:80}
                 ,{field: 'createTime', title: '创建时间', width:200}
                 ,{ title: '操作', width:200, toolbar: '#barDemo'}
             ]]
         });
-        //监听头工具栏事件
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //日期时间选择器
+        laydate.render({
+            elem: '#createTime'
+            ,type: 'datetime'
+        });
+    });
+    var $ = layui.$, active = {
+        reload: function(){
+            var demoReload = $('#demoReload');
+            //执行重载
+            table.reload('demo', {
+                url: "/user/searchUserById",
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+
+                    userId: demoReload.val()
+
+                }
+            }, 'data');
+        }
+    };
+
+    $('#search').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+
+
+
+    //监听头工具栏事件
         table.on('toolbar(test)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data; //获取选中的数据
@@ -94,7 +197,7 @@
                             content: $("#userSaveForm"),
                             icon: 1,
                             title:"添加用户",
-                            area: ['450px', '200px']
+                            area: ['450px', '350px']
                         }
                     )
                     break;
@@ -115,7 +218,7 @@
                         layer.confirm('确定要删除吗?', function(index){
                             //获取所有需要删除的userid，保存在ids的数组中
                            for(var i=0;i<data.length;i++){
-                               ids.push(data[i].userid);
+                               ids.push(data[i].userId);
                            }
                             $.ajax({
                                 url: 'delUser',//地址
@@ -145,6 +248,83 @@
                     break;
             };
         });
+
+    /**
+     * $(function () {
+        $("#name").blur(function () {
+            var name = $("#name").val();//获取id为name的值
+            $.post("/stu/findByTel_num", {tel_num: name}, function (data) {
+                if (data) {
+                    $("#err").html("有了");
+                    $("#btn").attr('disabled', true);
+                } else {
+                    $("#err").html("没有");
+                    $("#btn").attr('disabled', false);
+                }
+            });
+        });
+    })
+
+     $.ajax({
+			type:"POST",
+			url:xxx(对应后台的方法),
+			async: false, //改为同步请求
+			contentType:'application/json;charset=UTF-8',
+			data:JSON.stringify(datas),
+			dataType:'json',
+			success:function(data){
+				if(data){
+
+				}else{
+					message ="用户名已存在，请重新输入！"
+				}
+			}
+		});
+     //需要注意  需要将返回信息写在ajax方法外
+     if (message !== '')
+     return message;
+     }
+     if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    return '用户名不能有特殊字符';
+                }
+     if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                    return '用户名首尾不能出现下划线\'_\'';
+                }
+     if (/^\d+\d+\d$/.test(value)) {
+                    return '用户名不能全为数字';
+                }
+     if () {
+
+                }
+     */
+    function myfunction() {
+        form.verify({
+            loginName: function(value) {
+                if (value === "")
+                    return "用户名不能为空！";
+                var message = '';
+                $.ajax({
+                    //改为同步请求
+                    async: true,
+                    url: 'findByName',
+                    data: {
+                        loginName: value
+                    },
+                    dataType: 'json',
+                    type: 'POST',
+                    success: function(result) {
+                        //result的数据结构 ：   {"success":true,"message":"用户名已存在！"}
+                        if (result.success)
+                            message = result.message;
+                    }
+                });
+                if (message !== '')
+                    return message;
+            }
+        });
+    };
+
+
     //监听提交
     form.on('submit(saveUserForm)', function(data){
         //数据的提交，ajax方式
@@ -168,6 +348,7 @@
                     //关闭弹出层
                     layer.closeAll();
                     layer.msg(result.message,{icon:5})
+
                 }
             }
         });
@@ -200,6 +381,35 @@
         });
         return false;
     });
+    //监听提交
+    form.on('submit(resetPasswordForm)', function(data){
+        //数据的提交，ajax方式
+        console.log(data.field)
+        $.ajax({
+            url: '/user/resetPassword',//地址
+            dataType: 'json',//数据类型
+            type: 'POST',//类型
+            data:data.field,
+            //请求成功
+            success: function (result) {
+                if(result.code==0){
+                    //关闭弹出层
+                    layer.closeAll();
+                    //显示添加成功消息
+                    layer.msg(result.message,{icon:1})
+                    //重新加载数据表格
+                    myTable.reload();
+                }else
+                {
+                    //关闭弹出层
+                    layer.closeAll();
+                    layer.msg(result.message,{icon:5})
+                }
+            }
+        });
+        return false;
+    });
+
     //监听行工具事件
     table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
         var data = obj.data //获得当前行数据
@@ -216,19 +426,33 @@
             layer.msg('编辑操作');
             //填充修改用户的表单项
             console.log(data);
-            $("#username").val(data.username);
-            $("#userid").val(data.userid);
+            $("#userName").val(data.userName);
+            $("#userId").val(data.userId);
             layer.open(
                 {
                     type: 1,
                     content: $("#userEditForm"),
                     icon: 1,
                     title:"修改用户",
-                    area: ['450px', '200px']
+                    area: ['450px', '400px']
+                }
+            )
+        } else if(layEvent =='resetPassword'){
+            layer.msg('重置密码');
+            console.log(data);
+            $("#reuserId").val(data.userId);
+            layer.open(
+                {
+                    type:1,
+                    content:$("#resetPasswordForm"),
+                    title:"重置ID为"+data.userId+"的用户",
+                    area:['450px','400px']
                 }
             )
         }
     });
-
 </script>
 </html>
+
+
+
