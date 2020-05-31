@@ -29,4 +29,8 @@ public class MenuController {
         List<LayUiTree> layUiTrees = menuBiz.selectAllMenu();
         return layUiTrees;
     }
+    @RequestMapping("toShowMenuTree")
+    public String toShowMenuTree(){
+        return "menu/showMenuTree2";
+    }
 }
