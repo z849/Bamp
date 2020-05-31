@@ -29,7 +29,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">登录名</label>
         <div class="layui-input-block">
-            <input type="text" name="loginName" required lay-verify="required|loginName" placeholder="请输入登录名" autocomplete="off"
+            <input type="text" name="loginName" required lay-verify="required|loginName|isExist" placeholder="请输入登录名" autocomplete="off"
                    class="layui-input" onblur="myfunction()">
         </div>
 
@@ -117,15 +117,6 @@
 </form>
 </body>
 <script>
-    /*
-      layui.use('laydate', function(){
-        var laydate = layui.laydate;
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#test1' //指定元素
-        });
-    });*/
     var form=layui.form;
     var table=layui.table;
     form.render();//渲染表单
@@ -159,6 +150,40 @@
             ,type: 'datetime'
         });
     });
+    /**
+     * success:function(data){
+
+     * */
+
+    form.verify({
+        isExist:function(value){
+            var params = {"loginName":value };
+            var message = '';
+            var data;
+            $.ajax({
+                    url:'/findByName',
+                contentType: "application/json",
+                dataType:'json',
+                type: "POST",
+                async: false,
+                data: JSON.stringify(params),
+                success: function(result) {
+                    if(data){
+
+                    }else{
+                        message ="用户名已存在，请重新输入！"
+                    }
+                }
+            });
+            //需要注意  需要将返回信息写在ajax方法外
+            if (message !== '')
+                return message;
+        }
+    });
+
+
+
+
     var $ = layui.$, active = {
         reload: function(){
             var demoReload = $('#demoReload');
@@ -249,76 +274,6 @@
             };
         });
 
-    /**
-     * $(function () {
-        $("#name").blur(function () {
-            var name = $("#name").val();//获取id为name的值
-            $.post("/stu/findByTel_num", {tel_num: name}, function (data) {
-                if (data) {
-                    $("#err").html("有了");
-                    $("#btn").attr('disabled', true);
-                } else {
-                    $("#err").html("没有");
-                    $("#btn").attr('disabled', false);
-                }
-            });
-        });
-    })
-
-     $.ajax({
-			type:"POST",
-			url:xxx(对应后台的方法),
-			async: false, //改为同步请求
-			contentType:'application/json;charset=UTF-8',
-			data:JSON.stringify(datas),
-			dataType:'json',
-			success:function(data){
-				if(data){
-
-				}else{
-					message ="用户名已存在，请重新输入！"
-				}
-			}
-		});
-     //需要注意  需要将返回信息写在ajax方法外
-     if (message !== '')
-     return message;
-     }
-     if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
-                    return '用户名不能有特殊字符';
-                }
-     if (/(^\_)|(\__)|(\_+$)/.test(value)) {
-                    return '用户名首尾不能出现下划线\'_\'';
-                }
-     if (/^\d+\d+\d$/.test(value)) {
-                    return '用户名不能全为数字';
-                }
-     if () {
-
-                }
-     if (value === "")
-     return "用户名不能为空！";
-     var message = '';
-     $.ajax({
-                    //改为同步请求
-                    async: true,
-                    url: 'findByName',
-                    data: {
-                        loginName: value
-                    },
-                    dataType: 'json',
-                    type: 'POST',
-                    success: function(result) {
-                        //result的数据结构 ：   {"success":true,"message":"用户名已存在！"}
-                        if (result.success)
-                            message = result.message;
-                    }
-                });
-     if (message !== '')
-     return message;
-
-     username: function(value, item){ //value：表单的值、item：表单的DOM对象
-     */
     function myfunction() {
         form.verify({
             loginName: function(value) {

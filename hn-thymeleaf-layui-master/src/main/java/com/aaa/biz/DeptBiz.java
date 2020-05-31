@@ -12,4 +12,9 @@ import java.util.List;
  */
 public interface DeptBiz {
    List<Dept> selectAllDept();
+   int insertSelective(Dept record);
+   int delDeptByID(List<String> ids);
+   int updateByPrimaryKeySelective(Dept record);
+
+   List<Dept> searchDeptById(int deptId);
 }

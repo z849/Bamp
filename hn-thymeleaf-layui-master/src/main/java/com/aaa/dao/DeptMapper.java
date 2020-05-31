@@ -2,6 +2,7 @@ package com.aaa.dao;
 
 import com.aaa.entity.Dept;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface DeptMapper {
 
     int updateByPrimaryKey(Dept record);
     List<Dept> selectAllDept();
+
+    int delDeptByID( @Param("ids") List<String> ids);
+    List<Dept> searchDeptById(int deptId);
 }

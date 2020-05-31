@@ -26,11 +26,22 @@
         select * from tbl_dept where del_flag=0
 
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="searchDeptById" resultMap="BaseResultMap">
+    SELECT * FROM tbl_dept WHERE dept_id = #{deptId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tbl_dept
     where dept_id = #{deptId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.aaa.entity.Dept">
+    <delete id="delDeptByID">
+      delete from tbl_dept
+      where dept_id in
+      <foreach collection="ids" item="xxx" open="(" close=")" separator=",">
+        #{xxx}
+      </foreach>
+
+    </delete>
+    <insert id="insert" parameterType="com.aaa.entity.Dept">
     insert into tbl_dept (dept_id, dept_name, order_num, 
       status, del_flag, create_by, 
       create_time, update_by, update_time
