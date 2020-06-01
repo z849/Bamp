@@ -1,12 +1,16 @@
 package com.aaa.biz;
 
+import com.aaa.entity.LayUiTable;
 import com.aaa.entity.LayUiTree;
 import com.aaa.entity.Menu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface MenuBiz {
-    int deleteByPrimaryKey(Integer menuId);
+    int deleteByPrimaryKey(@Param("id")Integer menuId);
+
+    int deleteById(@Param("ids") List<String> ids);
 
     int insert(Menu record);
 
@@ -17,7 +21,7 @@ public interface MenuBiz {
 
     int updateByPrimaryKey(Menu record);
 
-    List<LayUiTree>  selectAllMenu();
+    public LayUiTable selectAllMenu();
     //根据用户登录名查询对应的所有菜单
     List<LayUiTree>  selectAllMenuByName(String loginName);
 }

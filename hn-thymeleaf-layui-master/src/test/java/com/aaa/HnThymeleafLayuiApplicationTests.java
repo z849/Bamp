@@ -17,7 +17,7 @@ class HnThymeleafLayuiApplicationTests {
 
     @Test
     void contextLoads() {
-        List<LayUiTree> menuList = menuBiz.selectAllMenu();
+        List<LayUiTree> menuList = (List<LayUiTree>) menuBiz.selectAllMenu();
         for (LayUiTree menu : menuList) {
             System.out.println(menu.toString());
         }

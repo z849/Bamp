@@ -23,4 +23,5 @@ public class MyConstants {
     public static final String algorithmName="MD5";
     //加密次数
     public static final   int hashIterations=1000;
+    public static final String showSuccessMsg="显示成功";
 }
