@@ -27,4 +27,6 @@ public interface MenuMapper {
     List<Menu> selectAllMenu();
 
     List<Menu>  selectAllMenuByName(String loginName);
+
+
 }

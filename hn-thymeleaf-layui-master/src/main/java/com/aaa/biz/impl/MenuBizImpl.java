@@ -75,18 +75,12 @@ public class MenuBizImpl implements MenuBiz {
      * @return
      */
     @Override
-    public LayUiTable selectAllMenu() {
+    public  List<LayUiTree>  selectAllMenu() {
         //查询所有的菜单
         List<Menu> menus = menuMapper.selectAllMenu();
         //并组装成tree格式的
         List<LayUiTree> tree=TreeUtils.getChildPerms(menus, 0);
-
-        LayUiTable table=new LayUiTable();
-        table.setCode(MyConstants.successCode);
-        table.setMsg(MyConstants.showSuccessMsg);
-        table.setCount(1);
-        table.setData(tree);
-        return table;
+        return tree;
     }
 
     @Override
@@ -96,4 +90,11 @@ public class MenuBizImpl implements MenuBiz {
         //并组装成tree格式的
         return TreeUtils.getChildPerms(menus, 0);
     }
+
+   /* public List<LayUiTree1> selectAllMenu1(String loginName) {
+        //查询所有的菜单
+        List<Menu> menus = menuMapper.selectAllMenuByName(loginName);
+        //并组装成tree格式的
+        return TreeUtils1.getChildPerms(menus, 0);
+    }*/
 }

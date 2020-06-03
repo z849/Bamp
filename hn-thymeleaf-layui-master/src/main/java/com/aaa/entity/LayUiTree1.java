@@ -11,7 +11,7 @@ import java.util.List;
  * 定义layui的树形菜单
  */
 @Data
-public class LayUiTree {
+public class LayUiTree1 {
 
     private String title;
     private int id;
@@ -19,10 +19,7 @@ public class LayUiTree {
     private boolean checked;
     private boolean spread;
     private String url;
-    private String perms;
-    private String menuType;
-    private List<LayUiTree> children;
-
+    private List<LayUiTree1> children;
 
 
 }

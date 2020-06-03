@@ -111,6 +111,8 @@ public class TreeUtils
         tree.setTitle(menu.getMenuName());
         tree.setChecked(false);
         tree.setUrl(menu.getUrl());
+        tree.setPerms(menu.getPerms());
+        tree.setMenuType(menu.getMenuType());
         return tree;
     }
 

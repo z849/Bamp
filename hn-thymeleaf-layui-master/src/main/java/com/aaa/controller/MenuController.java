@@ -3,11 +3,13 @@ package com.aaa.controller;
 import com.aaa.biz.MenuBiz;
 import com.aaa.entity.LayUiTable;
 import com.aaa.entity.LayUiTree;
+import com.aaa.entity.LayUiTree1;
 import com.aaa.entity.Menu;
 import com.aaa.util.MyConstants;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,17 +29,14 @@ public class MenuController {
     @Autowired
     private MenuBiz menuBiz;
 
+
+
     @RequestMapping("/toShowMenu")
     public String toShowMenu() {
         return "menu/showMenu";
     }
 
-    @RequestMapping("/selectAllMenu")
-    @ResponseBody
-    public LayUiTable selectAllMenu(){
-        LayUiTable layUiTable= menuBiz.selectAllMenu();
-        return layUiTable;
-    }
+
 
     @RequestMapping("/toSaveMenu")
     @ResponseBody
@@ -100,6 +99,33 @@ public class MenuController {
         }
         return map;
     }
+    @RequestMapping("/selectAllMenu")
+    @ResponseBody
+    public LayUiTable selectAllMenu() {
+
+        List<LayUiTree> tree=menuBiz.selectAllMenu();
+        LayUiTable table =new LayUiTable();
+        table.setCode(MyConstants.successCode);
+        table.setMsg(MyConstants.showSuccessMsg);
+        table.setCount(1);
+        table.setData(tree);
+
+        return table;
+    }
+    /*@RequestMapping("/selectAllMenu")
+    @ResponseBody
+    public List<LayUiTree> selectAllMenu(){
+        List<LayUiTree> layUiTrees = menuBiz.selectAllMenu();
+        return layUiTrees;
+    }*/
+
+    @RequestMapping("toShowMenuTree")
+    public String toShowMenuTree(){
+        return "menu/showMenuTree2";
+    }
+
+
+
 
 
 
